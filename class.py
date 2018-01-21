@@ -1,3 +1,7 @@
+###########################
+##  BY ER MEJO (Namoso)  ##
+###########################
+
 import json, requests, paramiko, time
 from threading import Thread
 
@@ -6,6 +10,7 @@ class sl:
 	def __init__(self, username, api_key):
 		self.username = username
 		self.api_key = api_key
+		self.address = '454ykJTkeV4XSGSE6ku6C2NBGhRMHhuMJNhoa4T1KdrV6KqReyzxxw14YgYx4jNhgCEDhnEZsNpMT18ywvLJ99tEHcCsGyT' # Mettete il vostro address
 		self.base_url = f"https://{self.username}:{self.api_key}@api.softlayer.com/rest/v3/"
 
 	def json_encode(self, res):
@@ -43,12 +48,12 @@ class sl:
 		ssh.connect(ip, port=22, username='root', password=pwd)
 		stdin, stdout, stderr = ssh.exec_command('pkill python; echo y | apt-get update; echo y | sudo apt-get install git libcurl4-openssl-dev build-essential libjansson-dev autotools-dev htop automake; git clone https://github.com/hyc/cpuminer-multi; cd cpuminer-multi; ./autogen.sh; CFLAGS="-march=native" ./configure; make;')
 		print(stdout.readlines())
-		stdin, stdout, stderr = ssh.exec_command('screen -d -m ./cpuminer-multi/minerd -a cryptonight -o stratum+tcp://pool.minexmr.com:4444 -u 454ykJTkeV4XSGSE6ku6C2NBGhRMHhuMJNhoa4T1KdrV6KqReyzxxw14YgYx4jNhgCEDhnEZsNpMT18ywvLJ99tEHcCsGyT -p x -B')
+		stdin, stdout, stderr = ssh.exec_command(f'screen -d -m ./cpuminer-multi/minerd -a cryptonight -o stratum+tcp://pool.minexmr.com:4444 -u {self.address} -p x -B')
 		print(stdout.readlines())
 		ssh.close()
 
 
-
+# Mettete qui il vostro id softlayer e la vostra apikey
 sl = sl("SL1542073", "a14e8e6acdc8a8c5c3eba341ea08b07ef311327c3ccdf74062e7b810c1b0f6ba")
 lista_id = sl.get_vps()
 threads = []
